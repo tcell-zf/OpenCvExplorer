@@ -1,0 +1,312 @@
+﻿<Page x:Class="OpenCvExplorer.Views.Pages.VideoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:uc="clr-namespace:OpenCvExplorer.Views.UserControls"
+      xmlns:local="clr-namespace:OpenCvExplorer.Views.Pages"
+      xmlns:model="clr-namespace:OpenCvExplorer.ViewModels.Pages"
+      mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="1920" Title="VideoPage"
+      Unloaded="Page_Unloaded">
+    <Page.Resources>
+        <ResourceDictionary>
+            <Grid x:Key="DialogContent" MinWidth="250">
+                <Grid x:Name="VideoFileInfo" VerticalAlignment="Top" Height="120">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-framewidth}"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-frameheight}"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-framecount}"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-fourcc}"/>
+
+                    <Label Grid.Row="0" Grid.Column="1" x:Name="LabelFrameWidth"/>
+                    <Label Grid.Row="1" Grid.Column="1" x:Name="LabelFrameHeight"/>
+                    <Label Grid.Row="2" Grid.Column="1" x:Name="LabelFrameCount"/>
+                    <Label Grid.Row="3" Grid.Column="1" x:Name="LabelFourCC"/>
+                </Grid>
+                <Grid x:Name="VideoStreamInfo" VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-framewidth}"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-frameheight}"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-fps}"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-brightness}"/>
+                    <Label Grid.Row="4" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-contrast}"/>
+                    <Label Grid.Row="5" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-saturation}"/>
+                    <Label Grid.Row="6" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-hue}"/>
+                    <Label Grid.Row="7" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-gain}"/>
+                    <Label Grid.Row="8" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-exposure}"/>
+                    <Label Grid.Row="9" Grid.Column="0" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-focus}"/>
+
+                    <Label Grid.Row="0" Grid.Column="1" x:Name="LabelFrameWidth1"/>
+                    <Label Grid.Row="1" Grid.Column="1" x:Name="LabelFrameHeight1"/>
+                    <Label Grid.Row="2" Grid.Column="1" x:Name="LabelFps"/>
+                    <Label Grid.Row="3" Grid.Column="1" x:Name="LabelBrightness"/>
+                    <Label Grid.Row="4" Grid.Column="1" x:Name="LabelContrast"/>
+                    <Label Grid.Row="5" Grid.Column="1" x:Name="LabelSaturation"/>
+                    <Label Grid.Row="6" Grid.Column="1" x:Name="LabelHue"/>
+                    <Label Grid.Row="7" Grid.Column="1" x:Name="LabelGain"/>
+                    <Label Grid.Row="8" Grid.Column="1" x:Name="LabelExposure"/>
+                    <Label Grid.Row="9" Grid.Column="1" x:Name="LabelFocus"/>
+                </Grid>
+            </Grid>
+
+            <Grid x:Key="SaveImageOptions">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Grid.Column="0" Name="DisplayedImage" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Stretch="Fill"/>
+                <uc:SaveImageOptions x:Name="Options" Grid.Column="1" Margin="5" MinWidth="480" MinHeight="200"/>
+            </Grid>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="115"/>
+                <ColumnDefinition Width="135"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Content="API Preference:" VerticalAlignment="Top" Margin="0,5,0,0"/>
+            <ui:DropDownButton Grid.Column="1" Width="120" HorizontalContentAlignment="Left" VerticalAlignment="Top" Icon="{ui:SymbolIcon GlobeVideo24}"
+                           Content="{Binding ViewModel.ApiPreferenceString, Mode=OneWay}">
+                <ui:DropDownButton.Flyout>
+                    <ContextMenu>
+                        <MenuItem Header="Any" Command="{Binding ViewModel.SetPrefAnyCommand}"/>
+                        <MenuItem Header="DShow" Command="{Binding ViewModel.SetPrefDShowCommand}"/>
+                        <MenuItem Header="FFMpeg" Command="{Binding ViewModel.SetPrefFFMpegCommand}"/>
+                        <MenuItem Header="Images" Command="{Binding ViewModel.SetPrefImagesCommand}"/>
+                    </ContextMenu>
+                </ui:DropDownButton.Flyout>
+            </ui:DropDownButton>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <ui:Button Grid.Column="0" Grid.Row="0"
+                           Content="{DynamicResource ResourceKey=video-tab-open}"
+                           Icon="{ui:SymbolIcon FolderOpen24}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-open-tooltip}"
+                           Command="{Binding ViewModel.OpenVideoFileCommand, RelativeSource={RelativeSource AncestorType=Page}}"/>
+                <Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Content="{Binding ViewModel.FileName}" ToolTip="{Binding ViewModel.FileName}"/>
+
+                <Label Grid.Column="0" Grid.Row="1" Content="{DynamicResource ResourceKey=video-tab-link}" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding ViewModel.Link, Mode=TwoWay}" Margin="0,0,5,0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="LostFocus">
+                            <i:InvokeCommandAction Command="{Binding ViewModel.LinkEnteredCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+
+                <ui:CardExpander Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Header="{DynamicResource ResourceKey=video-tab-cameras}" Margin="0,4,5,0">
+                    <Grid Height="90">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <ListView Grid.Row="0" Grid.ColumnSpan="2" Background="Transparent" BorderBrush="{x:Null}" ItemsSource="{Binding ViewModel.AllCameras}">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Focusable" Value="False"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListViewItem">
+                                                <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type model:CameraInfo}">
+                                    <RadioButton Margin="0,0,10,0"
+                                         Command="{Binding ViewModel.CameraSelectedCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                         CommandParameter="{Binding Index}"
+                                         Content="{Binding Name}"
+                                         GroupName="cameras"
+                                         IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=video-tab-videoprop-dialog-framewidth}"/>
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Slider Grid.Column="0" Minimum="320" Maximum="2500" VerticalAlignment="Center"
+                                    SmallChange="10" TickFrequency="10" IsSnapToTickEnabled="True" TickPlacement="TopLeft"
+                                    Value="{Binding ViewModel.VideoStreamInfo.CameraFrameWidth, Mode=TwoWay}"/>
+                            <Label Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Content="{Binding ViewModel.VideoStreamInfo.CameraFrameWidth, Mode=OneWay}"/>
+                        </Grid>
+                    </Grid>
+                </ui:CardExpander>
+            </Grid>
+
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <ui:Button Grid.Row="0" Grid.Column="0"
+                       Icon="{ui:SymbolIcon Play24}"
+                       ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-play-tooltip}"
+                       IsEnabled="{Binding ViewModel.IsAbleToPlay}"
+                       Tag="Play" Click="Button_Click"/>
+                <ui:Button Grid.Row="0" Grid.Column="1"
+                       Icon="{ui:SymbolIcon Stop24}"
+                       ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-stop-tooltip}"
+                       IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                       Tag="Stop" Click="Button_Click"/>
+                <ui:Button Grid.Row="1" Grid.Column="0"
+                           Icon="{ui:SymbolIcon ArrowRotateCounterclockwise24}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-rotate-counter-clockwise-tooltip}"
+                           IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                           Tag="CClock" Click="Button_Click"/>
+                <ui:Button Grid.Row="1" Grid.Column="1"
+                           Icon="{ui:SymbolIcon ArrowRotateClockwise24}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-rotate-clockwise-tooltip}"
+                           IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                           Tag="Clock" Click="Button_Click"/>
+                <ui:Button Grid.Row="1" Grid.Column="2"
+                           Icon="{ui:SymbolIcon ImageAltText24}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-videoprop-dialog-title}"
+                           IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                           Command="{Binding ViewModel.ShowVideoPropertiesCommand}"
+                           CommandParameter="{StaticResource DialogContent}"/>
+                <ui:Button Grid.Row="1" Grid.Column="3"
+                           Icon="{ui:SymbolIcon SaveImage20}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-imagesave-dialog-tooltip}"
+                           IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                           Command="{Binding ViewModel.SaveImageCommand}"
+                           CommandParameter="{StaticResource SaveImageOptions}"/>
+                <ui:DropDownButton Grid.Row="1" Grid.Column="4" HorizontalContentAlignment="Left" Width="160"
+                                   Icon="{ui:SymbolIcon ScaleFill24}"
+                                   IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                                   Content="{Binding ViewModel.Stretch, Mode=OneWay}">
+                    <ui:DropDownButton.Flyout>
+                        <ContextMenu>
+                            <MenuItem Header="None" Command="{Binding ViewModel.SetVideoStretchNoneCommand}"/>
+                            <MenuItem Header="Fill" Command="{Binding ViewModel.SetVideoStretchFillCommand}"/>
+                            <MenuItem Header="Uniform" Command="{Binding ViewModel.SetVideoStretchUniformCommand}"/>
+                            <MenuItem Header="UniformToFill" Command="{Binding ViewModel.SetVideoStretchUniformToFillCommand}"/>
+                        </ContextMenu>
+                    </ui:DropDownButton.Flyout>
+                </ui:DropDownButton>
+                <ui:Button Grid.Row="2" Grid.Column="0"
+                           Icon="{ui:SymbolIcon Multiplier5x48}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-video-speed-half-tooltip}"
+                           IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                           Command="{Binding ViewModel.SetHalfSpeedCommand}"/>
+                <ui:Button Grid.Row="2" Grid.Column="1"
+                           Icon="{ui:SymbolIcon Multiplier1x48}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-video-speed-normal-tooltip}"
+                           IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                           Command="{Binding ViewModel.SetNormalSpeedCommand}"/>
+                <ui:Button Grid.Row="2" Grid.Column="2"
+                           Icon="{ui:SymbolIcon Multiplier15x48}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-video-speed-oneandhalf-tooltip}"
+                           IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                           Command="{Binding ViewModel.SetOneAndHalfSpeedCommand}"/>
+                <ui:Button Grid.Row="2" Grid.Column="3"
+                           Icon="{ui:SymbolIcon Multiplier2x48}"
+                           ToolTipService.ToolTip="{DynamicResource ResourceKey=video-tab-video-speed-double-tooltip}"
+                           IsEnabled="{Binding ViewModel.IsAbleToStop}"
+                           Command="{Binding ViewModel.SetDoubleSpeedCommand}"/>
+            </Grid>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Image x:Name="video" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="8,8,8,0"
+                   Stretch="{Binding Stretch, Mode=OneWay}">
+                <Image.RenderTransform>
+                    <RotateTransform x:Name="videoRotation"
+                                     Angle="{Binding ViewModel.Angel}"
+                                     CenterX="{Binding ViewModel.CenterX}"
+                                     CenterY="{Binding ViewModel.CenterY}"/>
+                </Image.RenderTransform>
+            </Image>
+        </ScrollViewer>
+        <ui:ProgressRing Grid.Row="1" IsIndeterminate="True" Visibility="{Binding ViewModel.LoadingVisibility}"/>
+
+        <Grid Grid.Row="2" Visibility="{Binding ViewModel.VideoFileVisibility, Mode=OneWay}" Margin="0,0,0,5">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" HorizontalAlignment="Right" Content="{Binding ViewModel.VideoFileInfo.Position}"/>
+            <Slider Grid.Row="1" HorizontalAlignment="Stretch"
+                Maximum="{Binding ViewModel.VideoFileInfo.FrameCount, Mode=OneWay}"
+                Value="{Binding ViewModel.VideoFileInfo.PosFrames, Mode=OneWay}"
+                ValueChanged="Slider_ValueChanged"/>
+        </Grid>
+    </Grid>
+</Page>

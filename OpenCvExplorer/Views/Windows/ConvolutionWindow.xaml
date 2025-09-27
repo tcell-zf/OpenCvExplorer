@@ -1,0 +1,351 @@
+﻿<ui:FluentWindow xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:local="clr-namespace:OpenCvExplorer.Views.Windows"
+                 xmlns:uc="clr-namespace:OpenCvExplorer.Views.UserControls"
+                 x:Class="OpenCvExplorer.Views.Windows.ConvolutionWindow"
+                 mc:Ignorable="d" d:DesignHeight="1000" d:DesignWidth="2000"
+                 Title="{DynamicResource ResourceKey=wnd-convolution-title}">
+    <ui:FluentWindow.Resources>
+        <ResourceDictionary>
+            <Style x:Key="Title" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+        </ResourceDictionary>
+    </ui:FluentWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar
+            x:Name="TitleBar"
+            Title="{DynamicResource ResourceKey=wnd-convolution-title}"
+            CloseWindowByDoubleClickOnIcon="True" Grid.ColumnSpan="3" VerticalAlignment="Top">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Assets/OpenCV-logo-256.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" VerticalAlignment="Top" Height="100" Margin="10">
+                            <RadioButton Grid.Row="0" Content="{DynamicResource wnd-convolution-raw-image}"
+                                         IsChecked="{Binding ViewModel.IsRawImage}" GroupName="noise"/>
+                            <RadioButton Grid.Row="1" Content="{DynamicResource wnd-convolution-noise-salt-and-pepper}"
+                                         IsChecked="{Binding ViewModel.IsSaltAndPepperNoise}" GroupName="noise"/>
+                            <RadioButton Grid.Row="2" Content="{DynamicResource wnd-convolution-noise-gaussian}"
+                                         IsChecked="{Binding ViewModel.IsGaussianNoise}" GroupName="noise"/>
+                        </StackPanel>
+                        <Grid Grid.Column="1" VerticalAlignment="Top" Height="140">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Content="{DynamicResource wnd-convolution-noise-count}"
+                                   Visibility="{Binding ViewModel.SaltAndPepperVisibility}"/>
+                            <ui:NumberBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                          Minimum="0" Maximum="1000000" Width="140"
+                                          Visibility="{Binding ViewModel.SaltAndPepperVisibility}"
+                                          Value="{Binding ViewModel.NoiseCount, Mode=TwoWay}"/>
+                            <Label Grid.Row="1" Grid.Column="0"
+                                   Content="{DynamicResource wnd-convolution-noise-gaussian-mean}"
+                                   Visibility="{Binding ViewModel.GaussianVisibility}"/>
+                            <ui:NumberBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                          Minimum="0" Maximum="100" Width="140"
+                                          Visibility="{Binding ViewModel.GaussianVisibility}"
+                                          Value="{Binding ViewModel.Mean, Mode=TwoWay}"/>
+                            <Label Grid.Row="2" Grid.Column="0"
+                                   Content="{DynamicResource wnd-convolution-noise-gaussian-stddev}"
+                                   Visibility="{Binding ViewModel.GaussianVisibility}"/>
+                            <ui:NumberBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                          Minimum="0" Maximum="200" Width="140"
+                                          Visibility="{Binding ViewModel.GaussianVisibility}"
+                                          Value="{Binding ViewModel.Stddev, Mode=TwoWay}"/>
+                        </Grid>
+                    </Grid>
+
+                    <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-raw-image}"/>
+                    <Image Grid.Row="1" Grid.Column="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.ImageTooltip}" Source="{Binding ViewModel.RawImageSource, Mode=OneWay}"/>
+
+                    <Label Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-mean-blur}"/>
+                    <uc:ConvolutionParams Grid.Row="1" Grid.Column="2" Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                          DataContext="{Binding ViewModel.MeanBlur.ConvolutionParams}"/>
+                    <Image Grid.Row="1" Grid.Column="3" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.MeanBlur.ImageTooltip}" Source="{Binding ViewModel.MeanBlur.MeanBlurImageSource, Mode=OneWay}"/>
+
+                    <Label Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-gaussian-blur}"/>
+                    <uc:ConvolutionParams Grid.Row="1" Grid.Column="4" Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                          DataContext="{Binding ViewModel.GaussianBlur.ConvolutionParams}" MustBeOdd="True"/>
+                    <Image Grid.Row="1" Grid.Column="5" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.GaussianBlur.ImageTooltip}" Source="{Binding ViewModel.GaussianBlur.GaussianBlurImageSource, Mode=OneWay}"/>
+
+                    <Label Grid.Row="0" Grid.Column="6" Grid.ColumnSpan="2" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-median-blur}"/>
+                    <StackPanel Grid.Row="1" Grid.Column="6" Orientation="Vertical" Width="200">
+                        <Label Margin="3,0,0,0" Content="{DynamicResource ResourceKey=uc-convolution-param-kernel}"/>
+                        <ui:NumberBox HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                      Minimum="1" Maximum="30"
+                                      Value="{Binding ViewModel.MedianBlur.KernelSize, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <Image Grid.Row="1" Grid.Column="7" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.MedianBlur.ImageTooltip}" Source="{Binding ViewModel.MedianBlur.MedianBlurImageSource, Mode=OneWay}"/>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <uc:ConvolutionParams Grid.Column="0" Width="300" Height="500" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                          DataContext="{Binding ViewModel.CustomBlur.ConvolutionParams}"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-custom-blur}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.CustomBlur.CustomImageTooltip}" Source="{Binding ViewModel.CustomBlur.CustomBlurImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-horizontal-blur}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.CustomBlur.HorizontalImageTooltip}" Source="{Binding ViewModel.CustomBlur.HorizontalBlurImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <Grid Grid.Column="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-vertical-blur}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.CustomBlur.VerticalImageTooltip}" Source="{Binding ViewModel.CustomBlur.VerticalBlurImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <Grid Grid.Column="4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-diagonal-blur}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.CustomBlur.DiagonalImageTooltip}" Source="{Binding ViewModel.CustomBlur.DiagonalBlurImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <uc:ConvolutionParams Grid.Column="5" Width="300" Height="500" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                          DataContext="{Binding ViewModel.Laplacian.ConvolutionParams}"/>
+                    <Grid Grid.Column="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-laplacian}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.Laplacian.LaplacianImageTooltip}" Source="{Binding ViewModel.Laplacian.LaplacianImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <Grid Grid.Column="7">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-laplacian-sharpened}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.Laplacian.SharpenedImageTooltip}" Source="{Binding ViewModel.Laplacian.SharpenedLaplacianImageSource, Mode=OneWay}"/>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <uc:ConvolutionParams Grid.Column="0" Width="300" Height="500" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                          DataContext="{Binding ViewModel.Sobel.ConvolutionParams}"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-sobel-x}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.Sobel.XImageTooltip}" Source="{Binding ViewModel.Sobel.XGradImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-sobel-y}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.Sobel.YImageTooltip}" Source="{Binding ViewModel.Sobel.YGradImageSource, Mode=OneWay}"/>
+                    </Grid>
+
+                    <uc:ConvolutionParams Grid.Column="3" Width="300" Height="500" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                          DataContext="{Binding ViewModel.Scharr.ConvolutionParams}"/>
+                    <Grid Grid.Column="4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-scharr-x}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.Scharr.XImageTooltip}" Source="{Binding ViewModel.Scharr.XGradImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <Grid Grid.Column="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-scharr-y}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.Scharr.YImageTooltip}" Source="{Binding ViewModel.Scharr.YGradImageSource, Mode=OneWay}"/>
+                    </Grid>
+
+                    <Grid Grid.Column="6" Width="250" Height="150" VerticalAlignment="Top" Margin="0,15,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource wnd-convolution-canny-lower-threshold}"/>
+                        <ui:NumberBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                      Minimum="0" Maximum="500" SmallChange="0.1"
+                                      Value="{Binding ViewModel.Canny.LowerThreshold, Mode=TwoWay}"/>
+                        <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource wnd-convolution-canny-upper-threshold}"/>
+                        <ui:NumberBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                      Minimum="0" Maximum="1500" SmallChange="0.1"
+                                      Value="{Binding ViewModel.Canny.UpperThreshold, Mode=TwoWay}"/>
+                        <Label Grid.Row="2" Grid.Column="0" Content="{DynamicResource wnd-convolution-canny-aperture-size}"/>
+                        <ui:NumberBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                      Minimum="3" Maximum="7"
+                                      Value="{Binding ViewModel.Canny.ApertureSize, Mode=TwoWay}"/>
+                        <ui:ToggleSwitch Grid.Row="3" Grid.Column="1"
+                                         OffContent="{DynamicResource ResourceKey=wnd-convolution-canny-l1}"
+                                         OnContent="{DynamicResource ResourceKey=wnd-convolution-canny-l2}"
+                                         IsChecked="{Binding ViewModel.Canny.L2Gradient}"/>
+                    </Grid>
+                    <Grid Grid.Column="7">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-canny-edge}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.Canny.EdgeImageTooltip}" Source="{Binding ViewModel.Canny.EdgeImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <Grid Grid.Column="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource ResourceKey=wnd-convolution-canny-colored-edge}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.Canny.ColorEdgeImageTooltip}" Source="{Binding ViewModel.Canny.ColorEdgeImageSource, Mode=OneWay}"/>
+                    </Grid>
+
+                    <Grid Grid.Column="9" Width="300" Height="200" VerticalAlignment="Top" Margin="0,15,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition Height="2*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource wnd-convolution-bilateral-diameter}"/>
+                        <ui:NumberBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                      Minimum="0" Maximum="100"
+                                      Value="{Binding ViewModel.BilateralFilter.Diameter, Mode=TwoWay}"/>
+                        <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource wnd-convolution-bilateral-sigma-color}"/>
+                        <ui:NumberBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                      Minimum="0" Maximum="500" SmallChange="0.1"
+                                      Value="{Binding ViewModel.BilateralFilter.SigmaColor, Mode=TwoWay}"/>
+                        <Label Grid.Row="2" Grid.Column="0" Content="{DynamicResource wnd-convolution-bilateral-sigma-space}"/>
+                        <ui:NumberBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                      Minimum="0" Maximum="500" SmallChange="0.1"
+                                      Value="{Binding ViewModel.BilateralFilter.SigmaSpace, Mode=TwoWay}"/>
+                        <uc:ConvolutionParams Grid.Row="3" Grid.ColumnSpan="2" Width="300" Height="500" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"
+                                              DataContext="{Binding ViewModel.BilateralFilter.ConvolutionParams}"/>
+                    </Grid>
+                    <Grid Grid.Column="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Style="{StaticResource Title}" Content="{DynamicResource wnd-convolution-bilateral}"/>
+                        <Image Grid.Row="1" Stretch="Uniform" Margin="5" ToolTipService.ToolTip="{Binding ViewModel.BilateralFilter.ImageTooltip}" Source="{Binding ViewModel.BilateralFilter.BilateralImageSource, Mode=OneWay}"/>
+                    </Grid>
+                    <ui:ProgressRing Grid.Column="9" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" IsIndeterminate="True"
+                                     Visibility="{Binding ViewModel.BilateralFilter.LoadingVisibility}"/>
+
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</ui:FluentWindow>

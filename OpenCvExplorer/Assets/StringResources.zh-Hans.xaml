@@ -1,0 +1,167 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="title">OpenCV 浏览器</system:String>
+    <system:String x:Key="enabled">启用</system:String>
+    <system:String x:Key="disabled">禁用</system:String>
+    <system:String x:Key="yes">是</system:String>
+    <system:String x:Key="no">否</system:String>
+    <system:String x:Key="button-ok">确定</system:String>
+    <system:String x:Key="button-cancel">取消</system:String>
+    <system:String x:Key="width">宽度:</system:String>
+    <system:String x:Key="height">高度:</system:String>
+
+    <system:String x:Key="uc-widthheight-link-tooltip">点击限制两值同时改变...</system:String>
+    <system:String x:Key="uc-widthheight-unlink-tooltip">点击取消限制，两值可以各自改变...</system:String>
+
+    <system:String x:Key="dialog-select-image-title">选择图片文件...</system:String>
+    <system:String x:Key="dialog-select-video-title">选择视频文件...</system:String>
+
+    <system:String x:Key="image-tab-title">图片</system:String>
+    <system:String x:Key="video-tab-title">视频</system:String>
+    <system:String x:Key="settings-tab-title">设置</system:String>
+    <system:String x:Key="settings-tab-personalization">个性化</system:String>
+    <system:String x:Key="settings-tab-theme">主题</system:String>
+    <system:String x:Key="settings-tab-theme-light">浅色</system:String>
+    <system:String x:Key="settings-tab-theme-dark">深色</system:String>
+    <system:String x:Key="settings-tab-culture">语言</system:String>
+    <system:String x:Key="settings-tab-culture-chinese">中文</system:String>
+    <system:String x:Key="settings-tab-culture-english">英文</system:String>
+    <system:String x:Key="settings-tab-pane-display-mode">边条显示模式</system:String>
+    <system:String x:Key="settings-tab-about">关于OpenCV浏览器</system:String>
+
+    <system:String x:Key="image-tab-open">选择图片文件 ...</system:String>
+    <system:String x:Key="image-tab-open-tooltip">点击打开选择图片文件对话框</system:String>
+
+    <system:String x:Key="uc-saveimage-dialog-filter-imagefiles">图片文件</system:String>
+    <system:String x:Key="uc-saveimage-dialog-filter-allfiles">所有文件</system:String>
+    <system:String x:Key="uc-saveimage-success-title">保存成功</system:String>
+    <system:String x:Key="uc-saveimage-failure-title">保存失败</system:String>
+
+    <system:String x:Key="uc-imageeditor-status-point">像素坐标</system:String>
+    <system:String x:Key="uc-imageeditor-status-pixel">像素值</system:String>
+    <system:String x:Key="uc-imageeditor-imagechannel-all">原始图片</system:String>
+    <system:String x:Key="uc-imageeditor-imagechannel-gray">灰度图片</system:String>
+    <system:String x:Key="uc-imageeditor-imagechannel-channel-0">通道0</system:String>
+    <system:String x:Key="uc-imageeditor-imagechannel-channel-1">通道1</system:String>
+    <system:String x:Key="uc-imageeditor-imagechannel-channel-2">通道2</system:String>
+    <system:String x:Key="uc-imageeditor-imagechannel-channel-3">通道3</system:String>
+    <system:String x:Key="uc-imageeditor-imagechannel-bitwisenot">位反</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics">图像统计数据</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-tooltip">点击展开/合拢图像统计数据区</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-red">红色</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-green">绿色</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-blue">蓝色</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-gray">灰度</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-hue">色相</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-saturation">饱和度</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-value">明度</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-mean">均值:</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-stddev">标准差:</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-histsize">Bin数:</system:String>
+    <system:String x:Key="uc-imageeditor-imagestatistics-histsize-tooltip">选择直方图Bin数 (最小:1 最大:256)</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-equalize-hist">直方图均衡化</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-clahe">自适应直方图均衡化</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-clahe-cliplimit">对比度限制阈值:</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-clahe-gridsize">网格大小</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-back-project">直方图反向投影</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-back-project-hue-bin">色相Bin数:</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-back-project-hue-bin-tooltip">选择色相直方图Bin数 (最小:1 最大:256)</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-back-project-saturation-bin">饱和度Bin数:</system:String>
+    <system:String x:Key="uc-imageeditor-imageequalize-back-project-saturation-bin-tooltip">选择饱和度直方图Bin数 (最小:1 最大:256)</system:String>
+
+    <system:String x:Key="uc-imageeditor-imageprop-dialog-property-tooltip">点击查看图片属性对话框</system:String>
+    <system:String x:Key="uc-imageeditor-imageprop-dialog-save-tooltip">点击打开保存图片对话框</system:String>
+    <system:String x:Key="uc-imageeditor-imageprop-dialog-title">图片属性</system:String>
+    <system:String x:Key="uc-imageeditor-imageprop-dialog-type">Mat数据类型:</system:String>
+    <system:String x:Key="uc-imageeditor-imageprop-dialog-channels">通道数:</system:String>
+    <system:String x:Key="uc-imageeditor-imageprop-dialog-depth">深度:</system:String>
+
+    <system:String x:Key="uc-imageeditor-saveimage-dialog-title">保存图片参数</system:String>
+    <system:String x:Key="uc-imageeditor-close-tooltip">点击关闭图片</system:String>
+    <system:String x:Key="uc-imageeditor-convolution-tooltip">点击打开图像卷积操作演示窗口</system:String>
+
+    <system:String x:Key="uc-saveimage-option-jpeg-quality">质量:</system:String>
+    <system:String x:Key="uc-saveimage-option-jpeg-quality-tooltip">数值越大图片质量越好。</system:String>
+    <system:String x:Key="uc-saveimage-option-jpeg-progressive">渐进式:</system:String>
+    <system:String x:Key="uc-saveimage-option-jpeg-optimize">优化:</system:String>
+    <system:String x:Key="uc-saveimage-option-jpeg-rst-interval">重启间隔:</system:String>
+    <system:String x:Key="uc-saveimage-option-jpeg-luma-quality">单独亮度质量级别:</system:String>
+    <system:String x:Key="uc-saveimage-option-jpeg-chroma-quality">单独色度质量级别:</system:String>
+    <system:String x:Key="uc-saveimage-option-png-compression">压缩级别:</system:String>
+    <system:String x:Key="uc-saveimage-option-png-compression-tooltip">压缩级别的值设置越大，图片文件越小，压缩耗时越长。</system:String>
+    <system:String x:Key="uc-saveimage-option-png-strategy">压缩策略:</system:String>
+    <system:String x:Key="uc-saveimage-option-png-bilevel">二进制格式:</system:String>
+    <system:String x:Key="uc-saveimage-option-png-bilevel-tooltip">如果设置为“是”，则将保存为黑白两色PNG图片。</system:String>
+    <system:String x:Key="uc-saveimage-option-webp-quality">质量:</system:String>
+    <system:String x:Key="uc-saveimage-option-webp-quality-tooltip">数值越大图片质量越好。</system:String>
+    <system:String x:Key="uc-saveimage-option-other-options">可选的图片文件类型:</system:String>
+
+    <system:String x:Key="uc-convolution-param-scale">缩放比例:</system:String>
+    <system:String x:Key="uc-convolution-param-kernel">卷积核</system:String>
+    <system:String x:Key="uc-convolution-param-anchor">锚定点</system:String>
+    <system:String x:Key="uc-convolution-param-kernel-size">卷积核尺寸:</system:String>
+    <system:String x:Key="uc-convolution-param-bordertype">边缘处理:</system:String>
+
+    <system:String x:Key="video-tab-open">选择视频文件 ...</system:String>
+    <system:String x:Key="video-tab-open-tooltip">点击打开选择视频文件对话框</system:String>
+    <system:String x:Key="video-tab-cameras">摄像头</system:String>
+    <system:String x:Key="video-tab-link">视频链接:</system:String>
+    <system:String x:Key="video-tab-play-tooltip">点击播放视频源</system:String>
+    <system:String x:Key="video-tab-stop-tooltip">点击停止播放</system:String>
+    <system:String x:Key="video-tab-rotate-clockwise-tooltip">点击旋转视频90°</system:String>
+    <system:String x:Key="video-tab-rotate-counter-clockwise-tooltip">点击旋转视频-90°</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-title">视频属性</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-framewidth">帧宽度:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-frameheight">帧长度:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-fps">帧频率 (fps):</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-framecount">总帧数:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-fourcc">视频编码格式:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-brightness">亮度:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-contrast">对比度:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-saturation">饱和度:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-hue">色度:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-gain">增益:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-exposure">曝光度:</system:String>
+    <system:String x:Key="video-tab-videoprop-dialog-focus">焦点:</system:String>
+
+    <system:String x:Key="video-tab-video-speed-half-tooltip">半倍速播放视频</system:String>
+    <system:String x:Key="video-tab-video-speed-normal-tooltip">常规速度播放视频</system:String>
+    <system:String x:Key="video-tab-video-speed-oneandhalf-tooltip">1.5倍速播放视频</system:String>
+    <system:String x:Key="video-tab-video-speed-double-tooltip">两倍速播放视频</system:String>
+    <system:String x:Key="video-tab-imagesave-dialog-tooltip">点击打开保存视频截图对话框</system:String>
+    <system:String x:Key="video-tab-imagesave-dialog-title">保存视频截图参数</system:String>
+
+    <system:String x:Key="wnd-convolution-title">图像卷积操作演示</system:String>
+    <system:String x:Key="wnd-convolution-raw-image">原始图像</system:String>
+    <system:String x:Key="wnd-convolution-mean-blur">均值模糊</system:String>
+    <system:String x:Key="wnd-convolution-gaussian-blur">高斯模糊</system:String>
+    <system:String x:Key="wnd-convolution-median-blur">中值模糊</system:String>
+    <system:String x:Key="wnd-convolution-custom-blur">自定义模糊</system:String>
+    <system:String x:Key="wnd-convolution-horizontal-blur">水平模糊</system:String>
+    <system:String x:Key="wnd-convolution-vertical-blur">垂直模糊</system:String>
+    <system:String x:Key="wnd-convolution-diagonal-blur">对角线模糊</system:String>
+    <system:String x:Key="wnd-convolution-sobel-x">Sobel梯度 - X方向</system:String>
+    <system:String x:Key="wnd-convolution-sobel-y">Sobel梯度 - Y方向</system:String>
+    <system:String x:Key="wnd-convolution-scharr-x">Scharr梯度 - X方向</system:String>
+    <system:String x:Key="wnd-convolution-scharr-y">Scharr梯度 - Y方向</system:String>
+    <system:String x:Key="wnd-convolution-canny-edge">Canny边缘检测 - 灰度边缘</system:String>
+    <system:String x:Key="wnd-convolution-canny-colored-edge">Canny边缘检测 - 彩色边缘</system:String>
+    <system:String x:Key="wnd-convolution-canny-lower-threshold">低阈值:</system:String>
+    <system:String x:Key="wnd-convolution-canny-upper-threshold">高阈值:</system:String>
+    <system:String x:Key="wnd-convolution-canny-aperture-size">孔径尺寸:</system:String>
+    <system:String x:Key="wnd-convolution-canny-l1">使用L1算法</system:String>
+    <system:String x:Key="wnd-convolution-canny-l2">使用L2算法</system:String>
+    <system:String x:Key="wnd-convolution-bilateral">双边滤波</system:String>
+    <system:String x:Key="wnd-convolution-bilateral-diameter">邻域直径:</system:String>
+    <system:String x:Key="wnd-convolution-bilateral-sigma-color">颜色差异:</system:String>
+    <system:String x:Key="wnd-convolution-bilateral-sigma-space">空间差异:</system:String>
+    <system:String x:Key="wnd-convolution-noise-salt-and-pepper">椒盐噪声</system:String>
+    <system:String x:Key="wnd-convolution-noise-gaussian">高斯噪声</system:String>
+    <system:String x:Key="wnd-convolution-noise-count">噪点数:</system:String>
+    <system:String x:Key="wnd-convolution-noise-gaussian-mean">均值:</system:String>
+    <system:String x:Key="wnd-convolution-noise-gaussian-stddev">标准差:</system:String>
+    <system:String x:Key="wnd-convolution-laplacian">拉普拉斯滤波</system:String>
+    <system:String x:Key="wnd-convolution-laplacian-sharpened">拉普拉斯锐化</system:String>
+    <system:String x:Key="wnd-convolution-sharpness">图片锐度: {0}</system:String>
+</ResourceDictionary>

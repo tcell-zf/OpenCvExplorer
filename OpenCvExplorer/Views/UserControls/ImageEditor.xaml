@@ -1,0 +1,359 @@
+﻿<UserControl x:Class="OpenCvExplorer.Views.UserControls.ImageEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:local="clr-namespace:OpenCvExplorer.Views.UserControls"
+             mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style x:Key="StatisticsTableCellBorder" TargetType="Border">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                <Setter Property="BorderBrush" Value="DarkGray"/>
+                <Setter Property="BorderThickness" Value="1,1,0,0"/>
+                <Setter Property="Padding" Value="5,0,5,0"/>
+            </Style>
+            <Style x:Key="StatisticsTableHeaderBorder" TargetType="Border" BasedOn="{StaticResource ResourceKey=StatisticsTableCellBorder}">
+                <Setter Property="Background" Value="#FFC8C8C8"/>
+            </Style>
+            <Style x:Key="StatisticsTableRightMostHeaderBorder" TargetType="Border" BasedOn="{StaticResource ResourceKey=StatisticsTableHeaderBorder}">
+                <Setter Property="BorderThickness" Value="1,1,1,1"/>
+            </Style>
+            <Style x:Key="StatisticsTableRightMostCellBorder" TargetType="Border" BasedOn="{StaticResource ResourceKey=StatisticsTableCellBorder}">
+                <Setter Property="BorderThickness" Value="1,1,1,0"/>
+            </Style>
+            <Style x:Key="StatisticsTableBottomCellBorder" TargetType="Border" BasedOn="{StaticResource ResourceKey=StatisticsTableCellBorder}">
+                <Setter Property="BorderThickness" Value="1,1,0,1"/>
+            </Style>
+            <Style x:Key="StatisticsTableBottomRightMostCellBorder" TargetType="Border" BasedOn="{StaticResource ResourceKey=StatisticsTableCellBorder}">
+                <Setter Property="BorderThickness" Value="1,1,1,1"/>
+            </Style>
+
+            <Grid x:Key="DialogContent" MinWidth="250">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource ResourceKey=uc-imageeditor-imageprop-dialog-type}"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource ResourceKey=width}"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="{DynamicResource ResourceKey=height}"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="{DynamicResource ResourceKey=uc-imageeditor-imageprop-dialog-channels}"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="{DynamicResource ResourceKey=uc-imageeditor-imageprop-dialog-depth}"/>
+
+                <Label Grid.Row="0" Grid.Column="1" x:Name="LabelImageType"/>
+                <Label Grid.Row="1" Grid.Column="1" x:Name="LabelImageWidth"/>
+                <Label Grid.Row="2" Grid.Column="1" x:Name="LabelImageHeight"/>
+                <Label Grid.Row="3" Grid.Column="1" x:Name="LabelImageChannels"/>
+                <Label Grid.Row="4" Grid.Column="1" x:Name="LabelImageDepth"/>
+            </Grid>
+            <local:SaveImageOptions x:Key="SaveImageOptions" Margin="5" MinWidth="480" MinHeight="200"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="165"/>
+                <ColumnDefinition Width="175"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+
+            <ui:DropDownButton Grid.Column="0" Width="160" HorizontalContentAlignment="Left" Icon="{ui:SymbolIcon ScaleFill24}"
+                               Visibility="{Binding ControlVisibility, Mode=OneWay}"
+                               Content="{Binding Stretch, Mode=OneWay}">
+                <ui:DropDownButton.Flyout>
+                    <ContextMenu>
+                        <MenuItem Header="None" Command="{Binding SetImageStretchNoneCommand}"/>
+                        <MenuItem Header="Fill" Command="{Binding SetImageStretchFillCommand}"/>
+                        <MenuItem Header="Uniform" Command="{Binding SetImageStretchUniformCommand}"/>
+                        <MenuItem Header="UniformToFill" Command="{Binding SetImageStretchUniformToFillCommand}"/>
+                    </ContextMenu>
+                </ui:DropDownButton.Flyout>
+            </ui:DropDownButton>
+            <ui:DropDownButton Grid.Column="1" Width="170" HorizontalContentAlignment="Left" Icon="{ui:SymbolIcon LayerDiagonal20}"
+                               Visibility="{Binding ControlVisibility, Mode=OneWay}"
+                               Content="{Binding ImageChannelContent, Mode=OneWay}">
+                <ui:DropDownButton.Flyout>
+                    <ContextMenu ItemsSource="{Binding ImageChannels}">
+                        <ContextMenu.ItemTemplate>
+                            <DataTemplate>
+                                <MenuItem Header="{Binding Header}"/>
+                            </DataTemplate>
+                        </ContextMenu.ItemTemplate>
+                    </ContextMenu>
+                </ui:DropDownButton.Flyout>
+            </ui:DropDownButton>
+            <ui:ToggleSwitch Grid.Column="2"
+                             OffContent="{DynamicResource ResourceKey=uc-imageeditor-imagechannel-bitwisenot}"
+                             OnContent="{DynamicResource ResourceKey=uc-imageeditor-imagechannel-bitwisenot}"
+                             Visibility="{Binding ControlVisibility, Mode=OneWay}"
+                             IsChecked="{Binding BitwiseNotOn, Mode=TwoWay}"/>
+            <ui:Button Grid.Column="3" HorizontalAlignment="Right" Icon="{ui:SymbolIcon ImageAltText24}"
+                       Visibility="{Binding ControlVisibility, Mode=OneWay}"
+                       ToolTipService.ToolTip="{DynamicResource ResourceKey=uc-imageeditor-imageprop-dialog-property-tooltip}"
+                       Command="{Binding ShowImagePropertiesCommand}"
+                       CommandParameter="{StaticResource DialogContent}"/>
+            <ui:Button Grid.Column="4" HorizontalAlignment="Right" Icon="{ui:SymbolIcon SaveImage20}"
+                       Visibility="{Binding ControlVisibility, Mode=OneWay}"
+                       ToolTipService.ToolTip="{DynamicResource ResourceKey=uc-imageeditor-imageprop-dialog-save-tooltip}"
+                       Command="{Binding SaveImageCommand}"
+                       CommandParameter="{StaticResource SaveImageOptions}"/>
+            <ui:Button Grid.Column="5" HorizontalAlignment="Right" Icon="{ui:SymbolIcon ShareScreenStop24}"
+                       Visibility="{Binding ControlVisibility, Mode=OneWay}"
+                       ToolTipService.ToolTip="{DynamicResource ResourceKey=uc-imageeditor-close-tooltip}"
+                       Command="{Binding CloseImageCommand}"/>
+        </Grid>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+            <ScrollViewer.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Width" Value="40"/>
+                    <Setter Property="Height" Value="40"/>
+                </Style>
+            </ScrollViewer.Resources>
+            <Canvas Grid.Row="1" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
+                <Image Name="DisplayedImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3"
+                           Stretch="{Binding Stretch, Mode=OneWay}"
+                           Source="{Binding ImageSource, Mode=OneWay}"
+                           MouseMove="DisplayedImage_MouseMove"
+                           MouseLeave="DisplayedImage_MouseLeave"
+                           MouseLeftButtonDown="DisplayedImage_MouseLeftButtonDown"
+                           MouseLeftButtonUp="DisplayedImage_MouseLeftButtonUp"/>
+                <Border x:Name="RoiRect" BorderThickness="2" Background="#4C545454" Visibility="Collapsed" IsHitTestVisible="False">
+                    <Border.BorderBrush>
+                        <DrawingBrush TileMode="Tile" Viewport="0,0,3,3" ViewportUnits="Absolute" Viewbox="0,0,3,3" ViewboxUnits="Absolute">
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing Brush="Transparent">
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="#7FFF0000" Thickness="1"/>
+                                    </GeometryDrawing.Pen>
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,3,3"/>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Border.BorderBrush>
+                    <Label Foreground="#7FFF0000" Content="ROI"/>
+                </Border>
+            </Canvas>
+        </ScrollViewer>
+        <!--<ui:CardExpander Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Foreground="DarkCyan"
+                         Header="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics}">
+        </ui:CardExpander>-->
+        <ui:Button Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,80,0"
+                   Icon="{ui:SymbolIcon Symbol=CalendarDataBar24}"
+                   ToolTipService.ToolTip="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-tooltip}"
+                   Command="{Binding ExpandCollapseStatisticsCommand}"/>
+        <ui:Button Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,40,0"
+                   Icon="{ui:SymbolIcon Symbol=DataHistogram24}"
+                   ToolTipService.ToolTip="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-tooltip}"
+                   Command="{Binding ExpandCollapseEqualizeCommand}"/>
+        <ui:Button Grid.Row="2" HorizontalAlignment="Right"
+                   Icon="{ui:SymbolIcon Symbol=Blur24}"
+                   ToolTipService.ToolTip="{DynamicResource ResourceKey=uc-imageeditor-convolution-tooltip}" Click="Button_Click"/>
+        <Grid Grid.Row="3" Visibility="{Binding ImageStatisticsSection.Visibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Foreground="DarkCyan" FontWeight="DemiBold" FontStyle="Italic"
+                   Content="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics}"/>
+            <Grid Grid.Row="1" HorizontalAlignment="Left" MaxWidth="800">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource ResourceKey=StatisticsTableHeaderBorder}"/>
+                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ResourceKey=StatisticsTableHeaderBorder}">
+                    <Label Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center" Content="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-red}"/>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ResourceKey=StatisticsTableHeaderBorder}">
+                    <Label Foreground="Green" FontWeight="Bold" HorizontalAlignment="Center" Content="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-green}"/>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource ResourceKey=StatisticsTableHeaderBorder}">
+                    <Label Foreground="Blue" FontWeight="Bold" HorizontalAlignment="Center" Content="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-blue}"/>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource ResourceKey=StatisticsTableRightMostHeaderBorder}">
+                    <Label Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center" Content="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-gray}"/>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource ResourceKey=StatisticsTableCellBorder}">
+                    <Label Foreground="DarkOrange" FontWeight="Bold" Content="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-mean}"/>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource ResourceKey=StatisticsTableCellBorder}">
+                    <Label Content="{Binding ImageStatisticsSection.Red.Mean, Mode=OneWay}"/>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource ResourceKey=StatisticsTableCellBorder}">
+                    <Label Content="{Binding ImageStatisticsSection.Green.Mean, Mode=OneWay}"/>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource ResourceKey=StatisticsTableCellBorder}">
+                    <Label Content="{Binding ImageStatisticsSection.Blue.Mean, Mode=OneWay}"/>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="4" Style="{StaticResource ResourceKey=StatisticsTableRightMostCellBorder}">
+                    <Label Content="{Binding ImageStatisticsSection.Gray.Mean, Mode=OneWay}"/>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource ResourceKey=StatisticsTableBottomCellBorder}">
+                    <Label Foreground="DarkOrange" FontWeight="Bold" Content="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-stddev}"/>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource ResourceKey=StatisticsTableBottomCellBorder}">
+                    <Label Content="{Binding ImageStatisticsSection.Red.StdDev, Mode=OneWay}"/>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="2" Style="{StaticResource ResourceKey=StatisticsTableBottomCellBorder}">
+                    <Label Content="{Binding ImageStatisticsSection.Green.StdDev, Mode=OneWay}"/>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource ResourceKey=StatisticsTableBottomCellBorder}">
+                    <Label Content="{Binding ImageStatisticsSection.Blue.StdDev, Mode=OneWay}"/>
+                </Border>
+                <Border Grid.Row="2" Grid.Column="4" Style="{StaticResource ResourceKey=StatisticsTableBottomRightMostCellBorder}">
+                    <Label Content="{Binding ImageStatisticsSection.Gray.StdDev, Mode=OneWay}"/>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="2" Margin="0,5,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition MaxWidth="800"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-histsize}"/>
+                <Slider Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TickFrequency="1" IsSnapToTickEnabled="True" Minimum="1" Maximum="256"
+                        ToolTip="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-histsize-tooltip}"
+                        Value="{Binding HistSize, Mode=TwoWay}"/>
+                <Label Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Content="{Binding HistSize}"/>
+            </Grid>
+            <StackPanel Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left">
+                <lvc:CartesianChart Width="1000" Height="200" Margin="0,5,0,0" LegendPosition="Right" ZoomMode="X"
+                                    Series="{Binding ImageStatisticsSection.RgbSeries}">
+                    <lvc:CartesianChart.XAxes>
+                        <lvc:AxesCollection>
+                            <lvc:XamlAxis
+                            Labels="{Binding ImageStatisticsSection.XLabels}"
+                            LabelsRotation="0"
+                            SeparatorsPaint="#c8c8c8"
+                            SeparatorsAtCenter="False"
+                            TicksPaint="#232323"
+                            TicksAtCenter="True"
+                            MinStep="1"
+                            ForceStepToMin="True"/>
+                        </lvc:AxesCollection>
+                    </lvc:CartesianChart.XAxes>
+                </lvc:CartesianChart>
+                <lvc:CartesianChart Width="1000" Height="200" Margin="0,5,0,0" LegendPosition="Right" ZoomMode="X"
+                                    Visibility="{Binding ImageStatisticsSection.HsvChartVisibility}"
+                                    Series="{Binding ImageStatisticsSection.HsvSeries}">
+                    <lvc:CartesianChart.XAxes>
+                        <lvc:AxesCollection>
+                            <lvc:XamlAxis
+                            Labels="{Binding ImageStatisticsSection.XLabels}"
+                            LabelsRotation="0"
+                            SeparatorsPaint="#c8c8c8"
+                            SeparatorsAtCenter="False"
+                            TicksPaint="#232323"
+                            TicksAtCenter="True"
+                            MinStep="1"
+                            ForceStepToMin="True"/>
+                        </lvc:AxesCollection>
+                    </lvc:CartesianChart.XAxes>
+                </lvc:CartesianChart>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="3" Visibility="{Binding ImageEqualizeSection.Visibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Content="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-equalize-hist}"/>
+            <Image Grid.Row="1" Grid.Column="0" Stretch="UniformToFill" Margin="5" Source="{Binding ImageEqualizeSection.EqualizeImageSource}"/>
+            <Grid Grid.Row="0" Grid.Column="1" Height="145">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="105"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="22"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Content="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-clahe}"/>
+                <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-clahe-cliplimit}"/>
+                <Slider Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TickFrequency="0.1" IsSnapToTickEnabled="True" Minimum="0" Maximum="10"
+                        ToolTip="{DynamicResource ResourceKey=uc-imageeditor-imagestatistics-histsize-tooltip}"
+                        Value="{Binding ClipLimit, Mode=TwoWay}"/>
+                <Label Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding ClipLimit, StringFormat={}{0:F1}, Mode=OneWay}"/>
+                <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-clahe-gridsize}"/>
+                <local:WidthHeight Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                   MinimumWidth="1" MaximumWidth="1000" W="{Binding GridSizeWidth, Mode=TwoWay}"
+                                   MinimumHeight="1" MaximumHeight="1000" H="{Binding GridSizeHeight, Mode=TwoWay}"/>
+            </Grid>
+            <Image Grid.Row="1" Grid.Column="1" Stretch="UniformToFill" Margin="5" Source="{Binding ImageEqualizeSection.ClaheImageSource}"/>
+            <Grid Grid.Row="0" Grid.Column="2" Height="125" Visibility="{Binding ImageEqualizeSection.BackProjectVisibility}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="105"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="28"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Content="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-back-project}"/>
+                <Label Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Content="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-back-project-hue-bin}"/>
+                <Slider Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" Minimum="1" Maximum="256"
+                        ToolTip="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-back-project-hue-bin-tooltip}"
+                        Value="{Binding BackProjHueHistSize, Mode=TwoWay}"/>
+                <Label Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding BackProjHueHistSize, Mode=OneWay}"/>
+                <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Content="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-back-project-saturation-bin}"/>
+                <Slider Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" Minimum="1" Maximum="256"
+                        ToolTip="{DynamicResource ResourceKey=uc-imageeditor-imageequalize-back-project-saturation-bin-tooltip}"
+                        Value="{Binding BackProjSaturationHistSize, Mode=TwoWay}"/>
+                <Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding BackProjSaturationHistSize, Mode=OneWay}"/>
+            </Grid>
+            <Image Grid.Row="1" Grid.Column="2" Stretch="UniformToFill" Margin="5" Source="{Binding ImageEqualizeSection.BackProjectImageSource}"/>
+        </Grid>
+    </Grid>
+</UserControl>

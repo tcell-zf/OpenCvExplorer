@@ -1,0 +1,120 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DirectShowLibCore" Version="0.0.3" />
+    <PackageReference Include="LiveChartsCore" Version="2.0.0-rc6.1" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView" Version="2.0.0-rc6.1" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc6.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.11.0.20250507" />
+    <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.11.0.20250507" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.RichTextBox.Wpf" Version="1.1.0" />
+    <PackageReference Include="SkiaSharp" Version="3.119.0" />
+    <PackageReference Include="SkiaSharp.Views.WPF" Version="3.119.0" />
+    <PackageReference Include="WPF-UI" Version="3.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+    <None Remove="Assets\OpenCV-logo-1024.png" />
+    <None Remove="Assets\OpenCV-logo-256.png" />
+    <None Remove="Libs\LiveChartsCore.dll" />
+    <None Remove="Libs\LiveChartsCore.SkiaSharpView.dll" />
+    <None Remove="Libs\LiveChartsCore.SkiaSharpView.WPF.dll" />
+    <None Remove="Resources\bmp.png" />
+    <None Remove="Resources\jpeg.png" />
+    <None Remove="Resources\png.png" />
+    <None Remove="Resources\tif.png" />
+    <None Remove="Resources\webp.png" />
+    <None Remove="Settings.settings" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Assets\StringResources.xaml" />
+    <Page Remove="Assets\StringResources.zh-Hans.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App.ico" />
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\StringResources.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\StringResources.zh-Hans.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libs\LiveChartsCore.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libs\LiveChartsCore.SkiaSharpView.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libs\LiveChartsCore.SkiaSharpView.WPF.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\bmp.png" />
+    <Resource Include="Resources\jpeg.png" />
+    <Resource Include="Resources\png.png" />
+    <Resource Include="Resources\tif.png" />
+    <Resource Include="Resources\webp.png" />
+    <EmbeddedResource Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LiveChartsCore">
+      <HintPath>..\..\..\..\Tests\LiveChart2\LiveChart2\LiveChartsCore.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveChartsCore.SkiaSharpView">
+      <HintPath>..\..\..\..\Tests\LiveChart2\LiveChart2\LiveChartsCore.SkiaSharpView.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveChartsCore.SkiaSharpView.WPF">
+      <HintPath>..\..\..\..\Tests\LiveChart2\LiveChart2\LiveChartsCore.SkiaSharpView.WPF.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\OpenCV-logo-1024.png" />
+    <Resource Include="Assets\OpenCV-logo-256.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

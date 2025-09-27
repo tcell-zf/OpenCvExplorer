@@ -1,0 +1,72 @@
+﻿<Page x:Class="OpenCvExplorer.Views.Pages.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:helpers="clr-namespace:OpenCvExplorer.Helpers"
+      xmlns:local="clr-namespace:OpenCvExplorer.Views.Pages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="SettingsPage"
+      d:DataContext="{d:DesignInstance local:SettingsPage, IsDesignTimeCreatable=False}"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+      ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      mc:Ignorable="d">
+    <Page.Resources>
+        <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <helpers:CultureInfoToBooleanConverter x:Key="CultureInfoToBooleanConverter" />
+    </Page.Resources>
+
+    <StackPanel>
+        <TextBlock
+            FontSize="20"
+            FontWeight="Medium"
+            Text="{DynamicResource ResourceKey=settings-tab-personalization}" />
+        <TextBlock Margin="0,12,0,0" Text="{DynamicResource ResourceKey=settings-tab-theme}" />
+        <RadioButton
+            Margin="0,12,0,0"
+            Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
+            CommandParameter="theme_light"
+            Content="{DynamicResource ResourceKey=settings-tab-theme-light}"
+            GroupName="themeSelect"
+            IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
+        <RadioButton
+            Margin="0,8,0,0"
+            Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
+            CommandParameter="theme_dark"
+            Content="{DynamicResource ResourceKey=settings-tab-theme-dark}"
+            GroupName="themeSelect"
+            IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
+
+        <TextBlock Margin="0,12,0,0" Text="{DynamicResource ResourceKey=settings-tab-culture}" />
+        <RadioButton
+            Margin="0,12,0,0"
+            Command="{Binding ViewModel.ChangeCultureCommand, Mode=OneWay}"
+            CommandParameter="zh-Hans"
+            Content="{DynamicResource ResourceKey=settings-tab-culture-chinese}"
+            GroupName="cultureSelect"
+            IsChecked="{Binding ViewModel.CurrentCulture, Converter={StaticResource CultureInfoToBooleanConverter}, ConverterParameter=zh-Hans, Mode=OneWay}" />
+        <RadioButton
+            Margin="0,8,0,0"
+            Command="{Binding ViewModel.ChangeCultureCommand, Mode=OneWay}"
+            CommandParameter="en-US"
+            Content="{DynamicResource ResourceKey=settings-tab-culture-english}"
+            GroupName="cultureSelect"
+            IsChecked="{Binding ViewModel.CurrentCulture, Converter={StaticResource CultureInfoToBooleanConverter}, ConverterParameter=en-US, Mode=OneWay}" />
+
+        <TextBlock Margin="0,12,0,0" Text="{DynamicResource ResourceKey=settings-tab-pane-display-mode}" />
+        <ComboBox
+            Margin="0,8,100,0"
+            ItemsSource="{Binding ViewModel.PaneDisplayModes}"
+            SelectedItem="{Binding ViewModel.SelectedPaneDisplayMode, Mode=TwoWay}" />
+
+        <TextBlock
+            Margin="0,24,0,0"
+            FontSize="20"
+            FontWeight="Medium"
+            Text="{DynamicResource ResourceKey=settings-tab-about}" />
+        <TextBlock Margin="0,12,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
+    </StackPanel>
+</Page>

@@ -1,0 +1,48 @@
+﻿<Page x:Class="OpenCvExplorer.Views.Pages.ImagePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OpenCvExplorer.Views.Pages"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:uc="clr-namespace:OpenCvExplorer.Views.UserControls"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:model="clr-namespace:OpenCvExplorer.ViewModels.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800" Title="ImagePage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ui:Button Grid.Row="0"
+                   Content="{DynamicResource ResourceKey=image-tab-open}"
+                   Icon="{ui:SymbolIcon FolderOpen24}"
+                   ToolTipService.ToolTip="{DynamicResource ResourceKey=image-tab-open-tooltip}"
+                   Command="{Binding ViewModel.OpenImageCommand}"/>
+
+        <ListView Grid.Row="1" Background="Transparent" BorderBrush="{x:Null}" ItemsSource="{Binding ViewModel.FileNames}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Focusable" Value="False"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ContentPresenter Margin="0,20,0,0" HorizontalAlignment="Left"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type model:ImageInfo}">
+                    <StackPanel>
+                        <Label Foreground="DarkCyan" FontWeight="DemiBold" FontStyle="Italic" Content="{Binding FileName}" ToolTip="{Binding FileName}"/>
+                        <uc:ImageEditor DataContext="{Binding ImageEditorViewModel}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>

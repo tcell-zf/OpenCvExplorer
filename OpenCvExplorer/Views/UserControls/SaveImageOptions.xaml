@@ -1,0 +1,167 @@
+﻿<UserControl x:Class="OpenCvExplorer.Views.UserControls.SaveImageOptions"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:view="clr-namespace:OpenCvExplorer.Views.UserControls"
+             xmlns:model="clr-namespace:OpenCvExplorer.ViewModels.UserControls"
+             mc:Ignorable="d" d:DesignHeight="200" d:DesignWidth="480">
+    <UserControl.DataContext>
+        <model:SaveImageOptionsViewModel/>
+    </UserControl.DataContext>
+
+    <TabControl Margin="5" MinWidth="480" MinHeight="200" SelectionChanged="TabControl_SelectionChanged">
+        <TabItem Width="60">
+            <TabItem.Header>
+                <ui:Image CornerRadius="4" BorderBrush="#33000000" Height="40" Source="pack://application:,,,/OpenCvExplorer;component/Resources/jpeg.png"/>
+            </TabItem.Header>
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="48"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-jpeg-quality}"/>
+                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-jpeg-progressive}"/>
+                <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-jpeg-optimize}"/>
+                <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-jpeg-rst-interval}"/>
+                <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-jpeg-luma-quality}"/>
+                <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-jpeg-chroma-quality}"/>
+
+                <Slider Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="100"
+                        ToolTip="{DynamicResource ResourceKey=uc-saveimage-option-jpeg-quality-tooltip}"
+                        Value="{Binding JpegParameters.Quality, Mode=TwoWay}"/>
+                <ui:ToggleSwitch Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"
+                                 OffContent="{DynamicResource ResourceKey=disabled}"
+                                 OnContent="{DynamicResource ResourceKey=enabled}"
+                                 IsChecked="{Binding JpegParameters.Progressive, Mode=TwoWay}"/>
+                <ui:ToggleSwitch Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
+                                 OffContent="{DynamicResource ResourceKey=disabled}"
+                                 OnContent="{DynamicResource ResourceKey=enabled}"
+                                 IsChecked="{Binding JpegParameters.Optimize, Mode=TwoWay}"/>
+                <Slider Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="65535"
+                        Value="{Binding JpegParameters.RstInterval, Mode=TwoWay}"/>
+                <Slider Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="100"
+                        Value="{Binding JpegParameters.LumaQuality, Mode=TwoWay}"/>
+                <Slider Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="100"
+                        Value="{Binding JpegParameters.ChromaQuality, Mode=TwoWay}"/>
+
+                <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Content="{Binding JpegParameters.Quality, Mode=OneWay}"/>
+                <Label Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Content="{Binding JpegParameters.RstInterval, Mode=OneWay}"/>
+                <Label Grid.Column="2" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Content="{Binding JpegParameters.LumaQuality, Mode=OneWay}"/>
+                <Label Grid.Column="2" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Content="{Binding JpegParameters.ChromaQuality, Mode=OneWay}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Width="60">
+            <TabItem.Header>
+                <ui:Image CornerRadius="4" BorderBrush="#33000000" Height="40" Source="pack://application:,,,/OpenCvExplorer;component/Resources/png.png"/>
+            </TabItem.Header>
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="48"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-png-compression}"/>
+                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-png-strategy}"/>
+                <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-png-bilevel}"/>
+
+                <Slider Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="9"
+                        ToolTip="{DynamicResource ResourceKey=uc-saveimage-option-png-compression-tooltip}"
+                        Value="{Binding PngParameters.Compression, Mode=TwoWay}"/>
+                <ui:DropDownButton Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Width="160"
+                                   HorizontalContentAlignment="Left" Icon="{ui:SymbolIcon Branch24}"
+                                   Content="{Binding PngParameters.StrategyContent, Mode=OneWay}">
+                    <ui:DropDownButton.Flyout>
+                        <ContextMenu>
+                            <MenuItem Header="Default" Command="{Binding PngParameters.SetStrategyDefaultCommand, Mode=OneWay}"/>
+                            <MenuItem Header="Filtered" Command="{Binding PngParameters.SetStrategyFilteredCommand, Mode=OneWay}"/>
+                            <MenuItem Header="Huffman Only" Command="{Binding PngParameters.SetStrategyHuffmanOnlyCommand, Mode=OneWay}"/>
+                            <MenuItem Header="RLE" Command="{Binding PngParameters.SetStrategyRLECommand, Mode=OneWay}"/>
+                            <MenuItem Header="Fixed" Command="{Binding PngParameters.SetStrategyFixedCommand, Mode=OneWay}"/>
+                        </ContextMenu>
+                    </ui:DropDownButton.Flyout>
+                </ui:DropDownButton>
+                <ui:ToggleSwitch Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
+                                 OffContent="{DynamicResource ResourceKey=no}"
+                                 OnContent="{DynamicResource ResourceKey=yes}"
+                                 ToolTip="{DynamicResource ResourceKey=uc-saveimage-option-png-bilevel-tooltip}"
+                                 IsChecked="{Binding PngParameters.Bilevel, Mode=TwoWay}"/>
+
+                <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Content="{Binding PngParameters.Compression, Mode=OneWay}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Width="60">
+            <TabItem.Header>
+                <ui:Image CornerRadius="4" BorderBrush="#33000000" Height="40" Source="pack://application:,,,/OpenCvExplorer;component/Resources/webp.png"/>
+            </TabItem.Header>
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="48"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="{DynamicResource ResourceKey=uc-saveimage-option-webp-quality}"/>
+
+                <Slider Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TickFrequency="1" IsSnapToTickEnabled="True" Minimum="1" Maximum="100"
+                        ToolTip="{DynamicResource ResourceKey=uc-saveimage-option-webp-quality-tooltip}"
+                        Value="{Binding WebpParameters.Quality, Mode=TwoWay}"/>
+
+                <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Content="{Binding WebpParameters.Quality, Mode=OneWay}"/>
+            </Grid>
+        </TabItem>
+        <TabItem Width="60">
+            <TabItem.Header>
+                <ui:Image CornerRadius="4" BorderBrush="#33000000" Height="40" Source="pack://application:,,,/OpenCvExplorer;component/Resources/tif.png"/>
+            </TabItem.Header>
+        </TabItem>
+        <TabItem Width="60">
+            <TabItem.Header>
+                <ui:Image CornerRadius="4" BorderBrush="#33000000" Height="40" Source="pack://application:,,,/OpenCvExplorer;component/Resources/bmp.png"/>
+            </TabItem.Header>
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="48"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Content="{DynamicResource ResourceKey=uc-saveimage-option-other-options}"/>
+
+                <RadioButton Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" Content="BMP" GroupName="imagetype"
+                             Command="{Binding SelectImageTypeCommand, Mode=OneWay}"
+                             CommandParameter="Bmp"
+                             IsChecked="{Binding IsBmpSelected, Mode=OneWay}"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</UserControl>
